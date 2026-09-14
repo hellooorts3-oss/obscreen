@@ -13,7 +13,9 @@ const F = {
 const W = `#${FORM_WIDGET}`;
 export const formCss = `<style>
 #ovis-form-slot ${W}{margin:0!important;padding:0!important}
-${W} form{display:grid!important;grid-template-columns:1fr 1fr!important;column-gap:14px!important;margin:0!important}
+@media (min-width:901px){.os-formgrid{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)!important}}
+#ovis-form-slot{min-width:0!important}
+${W} form{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;column-gap:14px!important;margin:0!important}
 ${W} form>*{grid-column:1/-1!important}
 ${W} #${F.manager},${W} #${F.phone},${W} #${F.time},${W} #${F.date}{grid-column:auto!important}
 ${W} #privacy{order:99!important;margin:4px 0 22px!important}
