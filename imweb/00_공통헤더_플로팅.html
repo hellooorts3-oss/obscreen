@@ -1,0 +1,78 @@
+<style>
+body:not(.admin) #doz_header_wrap{display:none!important}
+body.admin #ovs-gnb,body.admin #ovs-float{display:none!important}
+#ovs-gnb{position:sticky;top:0;z-index:1000;background:#FFFFFF;border-bottom:1px solid #E4E9F0;font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif}
+#ovs-gnb *{box-sizing:border-box}
+#ovs-gnb .ovs-c{max-width:1180px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:26px}
+#ovs-gnb .ovs-logo{display:flex;align-items:center;flex:none;text-decoration:none}
+#ovs-gnb .ovs-logo img{display:block;height:40px;width:auto;max-width:none}
+#ovs-gnb .ovs-nav{display:flex;gap:20px;flex-wrap:nowrap}
+#ovs-gnb .ovs-nav a{font-size:13.5px;font-weight:500;color:#475467;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent;line-height:1.7}
+#ovs-gnb .ovs-nav a.on{color:#0F1724;font-weight:700;border-bottom-color:#1E5FD9}
+#ovs-gnb .ovs-nav a:hover{color:#0F1724}
+#ovs-gnb .ovs-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+#ovs-gnb .ovs-tel{font-size:13px;font-weight:700;color:#0F1724;white-space:nowrap;text-decoration:none}
+#ovs-gnb .ovs-cta{background:#1E5FD9;color:#FFFFFF;font-size:13px;font-weight:700;text-decoration:none;padding:9px 17px;border-radius:8px;white-space:nowrap;line-height:1.5}
+#ovs-gnb .ovs-cta:hover{background:#1547B0}
+#ovs-gnb .ovs-burger{display:none;width:40px;height:40px;border:1px solid #E4E9F0;border-radius:8px;background:#FFFFFF;color:#0F1724;align-items:center;justify-content:center;cursor:pointer;padding:0}
+#ovs-gnb .ovs-drawer{display:none;border-top:1px solid #E4E9F0;background:#FFFFFF}
+#ovs-gnb .ovs-drawer a{display:block;padding:14px 24px;font-size:15px;font-weight:600;color:#0F1724;text-decoration:none;border-bottom:1px solid #F4F7FB}
+#ovs-gnb .ovs-drawer a.on{color:#1E5FD9}
+#ovs-gnb.open .ovs-drawer{display:block}
+@media (max-width:1060px){#ovs-gnb .ovs-nav{gap:14px}#ovs-gnb .ovs-c{gap:18px}}
+@media (max-width:900px){#ovs-gnb .ovs-nav{display:none}#ovs-gnb .ovs-burger{display:inline-flex}}
+@media (max-width:520px){#ovs-gnb .ovs-tel{display:none}#ovs-gnb .ovs-logo img{height:34px}#ovs-gnb .ovs-c{padding:0 16px;gap:10px}}
+#ovs-float{position:fixed;right:20px;bottom:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif}
+#ovs-float a{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13.5px;font-weight:700;text-decoration:none;padding:12px 20px;border-radius:100px;box-shadow:0 8px 24px rgba(8,17,30,.28);line-height:1.4}
+#ovs-float .ok{background:#FAE100;color:#3A1D1D}
+#ovs-float .ot{background:#1E5FD9;color:#FFFFFF}
+@media (max-width:600px){#ovs-float{right:12px;bottom:14px}#ovs-float a{padding:11px 16px;font-size:12.5px}}
+</style>
+<div id="ovs-gnb">
+  <div class="ovs-c">
+    <a class="ovs-logo" href="/" aria-label="오비스크린 홈"><img src="https://cdn.imweb.me/upload/S202603313dd66d1c8f8d7/673d559e36620.png" alt="OVIS CLEAN 오비스크린" width="70" height="40"></a>
+    <div class="ovs-nav" role="navigation" aria-label="주 메뉴">
+      <a href="/">홈</a>
+      <a href="/service">청소 서비스</a>
+      <a href="/standard">작업기준</a>
+      <a href="/portfolio">시공사례</a>
+      <a href="/faq">자주 묻는 질문</a>
+      <a href="/guide">청소 가이드</a>
+      <a href="/about">회사소개</a>
+    </div>
+    <div class="ovs-right">
+      <a class="ovs-tel" href="tel:01000000000">010-0000-0000</a>
+      <a class="ovs-cta" href="/contact">무료 견적받기</a>
+      <button class="ovs-burger" type="button" aria-label="메뉴 열기" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1.1em" height="1.1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-.15em;flex:none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <div class="ovs-drawer">
+    <a href="/">홈</a>
+    <a href="/service">청소 서비스</a>
+    <a href="/standard">작업기준</a>
+    <a href="/portfolio">시공사례</a>
+    <a href="/faq">자주 묻는 질문</a>
+    <a href="/guide">청소 가이드</a>
+    <a href="/about">회사소개</a>
+    <a href="/contact">무료 견적받기</a>
+  </div>
+</div>
+<div id="ovs-float">
+  <a class="ok" href="http://pf.kakao.com/_xkxaSEX" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1.1em" height="1.1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-.15em;flex:none" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 카톡 상담</a>
+  <a class="ot" href="tel:01000000000"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1.1em" height="1.1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-.15em;flex:none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 전화 문의</a>
+</div>
+<script>
+(function(){
+  var RULES=[/^\/(33\/?)?$/,/^\/(service|hood-cleaning|duct-cleaning|kitchen-cleaning|maintenance)/,/^\/standard/,/^\/portfolio/,/^\/faq/,/^\/guide/,/^\/about/];
+  function init(){
+    var g=document.getElementById('ovs-gnb'); if(!g) return;
+    // 헤더를 body 맨 앞으로 (공통 코드 삽입 위치와 무관하게 sticky 가 동작하도록)
+    if (g.parentNode!==document.body) document.body.insertBefore(g, document.body.firstChild);
+    var p=location.pathname;
+    var links=g.querySelectorAll('.ovs-nav a, .ovs-drawer a');
+    for (var i=0;i<links.length;i++){ var idx=Array.prototype.indexOf.call(g.querySelectorAll(links[i].parentNode.className==='ovs-nav'?'.ovs-nav a':'.ovs-drawer a'), links[i]); if(RULES[idx] && RULES[idx].test(p)) links[i].className='on'; }
+    var b=g.querySelector('.ovs-burger'); if(b) b.onclick=function(){ var o=g.classList.toggle('open'); b.setAttribute('aria-expanded', o?'true':'false'); };
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
