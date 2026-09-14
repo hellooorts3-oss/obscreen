@@ -67,7 +67,7 @@ body.admin #ovs-gnb,body.admin #ovs-float{display:none!important}
   function init(){
     var g=document.getElementById('ovs-gnb'); if(!g) return;
     // 헤더를 body 맨 앞으로 (공통 코드 삽입 위치와 무관하게 sticky 가 동작하도록)
-    if (g.parentNode!==document.body) document.body.insertBefore(g, document.body.firstChild);
+    if (document.body.firstElementChild!==g) document.body.insertBefore(g, document.body.firstChild);
     var p=location.pathname;
     var links=g.querySelectorAll('.ovs-nav a, .ovs-drawer a');
     for (var i=0;i<links.length;i++){ var idx=Array.prototype.indexOf.call(g.querySelectorAll(links[i].parentNode.className==='ovs-nav'?'.ovs-nav a':'.ovs-drawer a'), links[i]); if(RULES[idx] && RULES[idx].test(p)) links[i].className='on'; }
