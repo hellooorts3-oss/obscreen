@@ -15,6 +15,7 @@ import juice from 'juice';
 import { ICONS } from './icons.mjs';
 import { VARIANTS } from './variants.mjs';
 import { localBusiness, service } from './jsonld.mjs';
+import { formCss } from './contactform.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SIAN = path.join(ROOT, '받은자료/받은자료/01_시안/오비스크린_시안_8페이지.html');
@@ -203,14 +204,18 @@ function emit(page, $, sectionEls) {
 for (const page of PAGES) {
   const $ = cheerio.load(src);
   const secs = $(`#page-${page.id} > section`).toArray();
-  if (page.board || page.form) {
-    // 페이지헤드 · CTA 만 변환하고 가운데는 아임웹 게시판/입력폼 자리
-    const head = secs[0], cta = secs[secs.length - 1];
-    const mid = secs.slice(1, page.form ? undefined : -1);
-    emit({ ...page, names: page.names, transform: (i, el) => {
-      if (i === 1) return { html: '', css: '', special: page.form ? 'form' : 'board', source: $.html(mid) };
-      return null;
-    } }, $, page.form ? [head, mid[0]] : [head, mid[0], cta]);
+  if (page.form) {
+    // 견적문의: 시안 formgrid 섹션에서 .formbox 를 빈 슬롯으로 비우고 아임웹 입력폼을 스크립트로 옮긴다
+    const fg = $(secs[1]);
+    fg.find('.formbox').empty().attr('id', 'ovis-form-slot');
+    emit({ ...page, transform: (i, el) => {
+      if (i !== 1) return null;
+      const b = buildSection($, el, {});
+      return { html: b.html, css: `${b.css}\n${formCss}`, special: 'form' };
+    } }, $, [secs[0], secs[1]]);
+  } else if (page.board) {
+    // 페이지헤드 · CTA 만 변환하고 가운데는 아임웹 게시판 자리 (boards.mjs)
+    emit({ ...page, transform: (i) => i === 1 ? { html: '', css: '', special: 'board' } : null }, $, [secs[0], secs[1], secs[secs.length - 1]]);
   } else {
     emit(page, $, secs);
   }
