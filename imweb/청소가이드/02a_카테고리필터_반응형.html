@@ -1,0 +1,17 @@
+<style>
+.os-fchip{transition:border-color .15s ease,color .15s ease}
+.os-fchip.os-fchip-on,.os-fchip.os-fchip-on:link,.os-fchip.os-fchip-on:visited{background:#0D1A2B!important;color:#FFFFFF!important;border-color:#0D1A2B!important}
+.os-fchip:not(.os-fchip-on),.os-fchip:not(.os-fchip-on):link,.os-fchip:not(.os-fchip-on):visited{background:#FFFFFF!important;color:#475467!important;border-color:#E4E9F0!important}
+@media (hover:hover){.os-fchip:not(.os-fchip-on):hover{border-color:#1E5FD9!important;color:#1E5FD9!important}}
+@media (max-width:600px){.os-filter{flex-wrap:nowrap!important;overflow-x:auto!important;padding-bottom:4px!important}.os-fchip{flex:none!important}}
+</style>
+<script>
+(function(){
+  function mark(){
+    var m=location.search.match(/[?&]category=([^&]+)/), cur=m?decodeURIComponent(m[1]):'';
+    var chips=document.querySelectorAll('.os-fchip');
+    for(var i=0;i<chips.length;i++){ var on=(chips[i].getAttribute('data-cat')||'')===cur; chips[i].className='os-fchip'+(on?' os-fchip-on':''); }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mark); else mark();
+})();
+</script>

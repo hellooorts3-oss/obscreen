@@ -14,6 +14,7 @@ import * as cheerio from 'cheerio';
 import juice from 'juice';
 import { ICONS } from './icons.mjs';
 import { VARIANTS } from './variants.mjs';
+import { localBusiness, service } from './jsonld.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SIAN = path.join(ROOT, '받은자료/받은자료/01_시안/오비스크린_시안_8페이지.html');
@@ -188,11 +189,13 @@ function writePage(dir, slug, sections) {
 const manifest = {};
 function emit(page, $, sectionEls) {
   const secs = sectionEls.map((el, i) => {
-    const key = `os-${page.slug.replace(/[^a-z]/g, '')}-${String(i + 1).padStart(2, '0')}`;
     const r = page.transform ? page.transform(i, el, $) : null;
-    const built = r || buildSection($, el, { key });
+    const built = r || buildSection($, el, {});
     return { name: page.names[i] || `섹션${i + 1}`, ...built };
   });
+  // 구조화 데이터는 첫 섹션 코드 위젯 끝에 붙인다
+  const ld = page.slug === 'about' ? localBusiness() : service(page.slug);
+  if (ld && secs[0].css) secs[0].css += `\n${ld}`;
   writePage(page.dir, page.slug, secs);
   manifest[page.slug] = secs.map(s => ({ name: s.name, text: s.html, code: s.css, special: s.special || null }));
 }
