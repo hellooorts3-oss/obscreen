@@ -1,9 +1,0 @@
-<!doctype html><meta charset="utf-8"><title>ovis relay</title>
-<p id="s">relay…</p>
-<script>
-// 디자인모드 창이 window.open 으로 연 팝업. 번들을 읽어 opener 에 postMessage 로 넘긴다
-fetch('/imweb/_bundle.json?' + Date.now()).then(r => r.json()).then(j => {
-  (window.opener || window.parent).postMessage({ ovisBundle: j }, '*');
-  document.getElementById('s').textContent = 'sent ' + Object.keys(j).length;
-}).catch(e => document.getElementById('s').textContent = 'ERR ' + e);
-</script>
