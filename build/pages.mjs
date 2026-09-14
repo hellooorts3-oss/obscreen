@@ -509,7 +509,9 @@ ${grid(5, [
       ${grid(4, ['업종과 매장 위치(구 · 동)', '후드 길이 또는 화구 수', '희망 작업 일정 · 요일', '마지막 청소 시기(아는 경우)'].map(t => list([t], 'check', { size: 14, weight: 400, color: '#475467' })), 0)}
     </div>`;
     })],
-    ['문의폼_제목', section({ key: 'ovis-ct-form', bg: '#FFFFFF', pad: '88px 0 20px', align: 'center' }, () => `    <div id="ovis-form" style="max-width:720px;margin:0 auto;">
+    // 이 섹션 아래에 아임웹 입력폼 위젯(w20260914e3ce4271b42f0)이 붙어 있다 → 폭·여백을 여기서 잡는다
+    ['문의폼_제목', section({ key: 'ovis-ct-form', bg: '#FFFFFF', pad: '88px 0 20px', align: 'center', extraCss: `#w20260914e3ce4271b42f0{max-width:720px!important;margin:0 auto!important;padding:8px 24px 88px!important;box-sizing:border-box!important}
+#w20260914e3ce4271b42f0 .btn,#w20260914e3ce4271b42f0 button[type=submit]{background:#1E5FD9!important;border-color:#1E5FD9!important;color:#FFFFFF!important;border-radius:10px!important;font-weight:700!important}` }, () => `    <div id="ovis-form" style="max-width:720px;margin:0 auto;">
       ${pill('Online Inquiry')}
       ${h2(`온라인 ${blue('견적 문의')}`)}
       <p class="ovis-sub" style="margin:0 auto;max-width:56ch;font-size:15px;font-weight:400;line-height:1.8;color:#475467;">아래 양식을 작성해 주시면 확인 후 담당자가 연락드립니다. 사진은 문의 접수 후 안내드리는 번호로 보내주셔도 됩니다.</p>
@@ -547,8 +549,351 @@ ${grid(5, [
   ],
 };
 
+/* ============================================================ 공통: 기준표 (공통 head 의 .ovis-std 스타일 사용) */
+const TH = 'padding:14px 18px;border-bottom:1px solid #E4E9F0;background:#F4F7FB;font-size:12.5px;font-weight:700;line-height:1.6;color:#475467;text-align:left;white-space:nowrap;';
+const TD = 'padding:14px 18px;border-bottom:1px solid #E4E9F0;vertical-align:top;line-height:1.75;color:#475467;';
+function stdTable(cols, rows, mt = 0) {
+  return `    <div class="ovis-stdwrap" style="overflow-x:auto;margin-top:${mt}px;border:1px solid #E4E9F0;border-radius:14px;background:#FFFFFF;">
+      <table class="ovis-std" style="width:100%;min-width:700px;border-collapse:collapse;font-size:14px;">
+        <thead>
+          <tr>${cols.map(([t, w]) => `<th style="${w ? `width:${w}px;` : ''}${TH}">${t}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+${rows.map((r, ri) => `          <tr>${r.map((c, ci) => `<td style="${ri === rows.length - 1 ? TD.replace('border-bottom:1px solid #E4E9F0;', '') : TD}">${ci === 0 ? `<span style="font-weight:700;color:#0F1724;">${c}</span>` : c}</td>`).join('')}</tr>`).join('\n')}
+        </tbody>
+      </table>
+    </div>`;
+}
+const linkCard = (en, title, desc, items, href, label) => card(
+  `<div style="margin-bottom:12px;font-size:11px;font-weight:700;letter-spacing:.16em;line-height:1.7;color:#1E5FD9;">${en}</div>`
+  + cardTitle(title, 10, 22) + cardText(desc, 18) + list(items, 'check', { size: 14, weight: 400, color: '#0F1724', gap: 9 })
+  + `<div style="margin-top:22px;"><a class="ovis-golink" href="${href}" style="display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:700;line-height:1.6;color:#1E5FD9;text-decoration:none;">${label}</a></div>`,
+  '32px 30px');
+const stdCrumbs = last => ['홈', '작업기준', last];
+
+/* ============================================================ 작업기준 (허브) */
+const standards = {
+  dir: '작업기준',
+  sections: [
+    ['페이지헤드', withUsed(() => pagehead({
+      crumbs: ['홈', '작업기준'],
+      title: `어떻게 작업하고,${br}<span style="color:#3B82F6;white-space:nowrap;">어디까지 청소하는지</span> 공개합니다`,
+      desc: `오비스크린은 표준작업매뉴얼(${nw('OBS-SOP-001')})에 따라 작업합니다. 작업 순서와 완료 판정 기준을 미리 공개해, 계약 전에 무엇을 받게 되는지 확인하실 수 있게 합니다.`,
+      chips: ['#표준작업매뉴얼', '#8단계 공정', '#완료 판정 기준', '#사용 금지 약품'],
+    }))],
+    ['기준문서', section({ key: 'ovis-sd-docs', bg: '#FFFFFF' }, () => `${head({
+      eb: '작업기준 문서',
+      title: `두 가지 기준으로${br}${blue('작업 품질')}을 관리합니다`,
+    })}
+${grid(2, [
+      linkCard('PROCESS', '작업 프로세스', '사전점검과 위험성평가부터 작업 후 리포트까지, 모든 현장에 같은 순서를 적용합니다.', [
+        '사전점검 · 위험성평가', '양생 → 분해 → 세정 → 헹굼', '조립 · 시운전', '작업 후 리포트 전달',
+      ], '/process', '작업 프로세스 8단계 보기 →'),
+      linkCard('QUALITY', '시공 품질기준', '설비별로 어떤 상태가 되어야 "청소 완료"인지, 무엇을 하면 안 되는지 정해 둔 기준입니다.', [
+        '설비별 완료 판정 기준', '재질별 사용 금지 약품', '복구 불가 손상 사전 안내', '재작업 기준',
+      ], '/quality-standard', '시공 품질기준 보기 →'),
+    ])}`)],
+    ['작업원칙', section({ key: 'ovis-sd-rule', bg: '#F4F7FB' }, () => `${head({
+      eb: '작업 원칙',
+      title: `현장이 달라도 ${blue('바뀌지 않는 것')}`,
+    })}
+${grid(4, [
+      ['01', '범위를 먼저 문서로', '작업 전에 포함 · 제외 범위를 확정하고, 현장에서 임의로 늘리거나 줄이지 않습니다.'],
+      ['02', '재질에 맞는 약품만', '설비 재질을 확인하고, 사용하면 손상되는 약품은 쓰지 않습니다.'],
+      ['03', '같은 자리에서 촬영', `작업 ${'전·후'}를 같은 위치와 각도로 촬영해 결과를 비교할 수 있게 남깁니다.`],
+      ['04', '손상은 미리 서면으로', '청소로 복구되지 않는 손상은 작업 전에 서면으로 안내하고 동의를 받습니다.'],
+    ].map(([n, t, d]) => card(num(n) + cardTitle(t) + cardText(d), '26px 22px')))}`)],
+    ['하단CTA', withUsed(() => cta({
+      title: `기준을 보고 결정하셔도${br}<span style="color:#3B82F6;white-space:nowrap;">늦지 않습니다</span>`,
+      desc: `다른 업체 견적과 비교 중이시라면 ${b('<span style="color:#FFFFFF;">작업 범위와 완료 기준</span>')}을 나란히 놓고 보세요. 궁금한 항목은 상담에서 설명드립니다.`,
+    }))],
+  ],
+};
+
+/* ============================================================ 작업 프로세스 */
+const proc = {
+  dir: '작업프로세스',
+  sections: [
+    ['페이지헤드', withUsed(() => pagehead({
+      crumbs: stdCrumbs('작업 프로세스'),
+      title: `사전점검부터 리포트까지,${br}<span style="color:#3B82F6;white-space:nowrap;">8단계 표준 공정</span>을 공개합니다`,
+      desc: `후드청소 · 덕트청소 · 주방 전체청소 모두 같은 순서로 진행합니다. 단계마다 확인할 항목이 정해져 있어, 작업자가 달라도 결과의 기준이 같습니다.`,
+      chips: [`#${'OBS-SOP-001'}`, '#위험성평가', '#시운전 확인', '#작업 후 리포트'],
+      buttons: svcBtns('작업 일정 문의'),
+    }))],
+    ['8단계개요', section({ key: 'ovis-pr-steps', bg: '#FFFFFF' }, () => `${head({
+      eb: '8단계 공정',
+      title: `모든 현장에 ${blue('같은 순서')}를 적용합니다`,
+    })}
+${steps([
+      { t: '사전점검 · 위험성평가', d: '설비 구조와 오염도, 작업 동선, 전기 · 가스 · 고소작업 위험 요소를 확인합니다.' },
+      { t: '양생', d: '조리설비와 바닥, 식자재 보관 구역을 덮어 세정수와 오염물이 번지지 않게 막습니다.' },
+      { t: '분해', d: '필터 · 기름받이 · 배기팬 등 분리 가능한 부품을 순서대로 떼어내고 위치를 기록합니다.' },
+      { t: '세정', d: '재질과 오염 유형에 맞는 세정제 계열을 골라 침적 · 도포 · 스크래핑으로 유분을 제거합니다.' },
+      { t: '헹굼 · 중화', d: '세정제가 남지 않도록 충분히 헹구고, 필요한 경우 중화 처리합니다.' },
+      { t: '조립', d: '분해 기록대로 원위치에 조립하고 체결 상태와 누락 부품을 확인합니다.' },
+      { t: '시운전', d: '배기팬을 가동해 흡입 · 소음 · 진동 · 누유 여부를 확인합니다.' },
+      { t: '작업 후 리포트', d: `${'전·후'} 사진과 점검소견, 다음 권장 시점을 정리해 전달합니다.` },
+    ], 4)}`)],
+    ['단계별기준', section({ key: 'ovis-pr-table', bg: '#F4F7FB' }, () => `${head({
+      eb: '단계별 확인 기준',
+      title: `단계마다 ${blue('끝났다고 보는 조건')}이 있습니다`,
+      desc: '다음 단계로 넘어가기 전에 아래 조건을 확인합니다. 조건을 충족하지 못하면 해당 단계를 다시 진행합니다.',
+    })}
+${stdTable([['단계', 150], ['주요 작업'], ['다음 단계로 넘어가는 조건', 300]], [
+      ['1. 사전점검', '구조 · 오염도 확인, 위험성평가, 작업 범위 확정', '범위 · 제외 항목 · 일정 합의'],
+      ['2. 양생', '조리설비 · 바닥 · 보관 구역 보호, 전원 · 가스 확인', '노출된 식자재 · 전기설비 없음'],
+      ['3. 분해', '필터 · 기름받이 · 배기팬 부품 분리', '분리 부품 수량 · 위치 기록'],
+      ['4. 세정', '재질별 세정제 적용, 침적 · 스크래핑', '손으로 만졌을 때 유분이 묻어나지 않음'],
+      ['5. 헹굼 · 중화', '세정제 잔류물 제거', '거품 · 약품 잔여물 없음'],
+      ['6. 조립', '원위치 조립, 체결 확인', '분해 기록과 부품 수량 일치'],
+      ['7. 시운전', '배기팬 가동, 흡입 · 소음 · 누유 확인', '작업 전 대비 이상 없음'],
+      ['8. 리포트', `${'전·후'} 사진 · 점검소견 · 권장 시점 작성`, '고객 확인 후 작업 종료'],
+    ])}`)],
+    ['안전관리', section({ key: 'ovis-pr-safe', bg: '#FFFFFF' }, () => `    <div class="ovis-split2" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+      <div>
+        ${eyebrow('위험성평가 · 안전관리')}
+        ${h2(`청소보다 먼저${br}${blue('사고 요인')}을 확인합니다`)}
+        ${sub('상업용 주방 청소는 전기, 가스, 고소작업, 약품이 한 공간에 겹치는 작업입니다. 작업 시작 전에 위험 요소를 확인하고 대응 방법을 정한 뒤 진행합니다.')}
+      </div>
+      ${card(cardTitle('작업 전 확인 항목', 16, 17) + list([
+        { t: '전원 · 가스 차단', s: '조리설비와 배기팬 전원, 가스 밸브 잠금 확인' },
+        { t: '고소작업 장비 점검', s: '사다리 · 이동식 비계 고정 상태와 작업 높이 확인' },
+        { t: '약품 취급 보호구', s: '보안경 · 내화학 장갑 착용, 약품 혼합 금지' },
+        { t: '환기 확보', s: '세정제 사용 구간의 환기 경로 확인' },
+        { t: '미끄럼 · 낙하물 대비', s: '바닥 배수 경로 확보, 작업 구역 출입 통제' },
+      ], 'check'), '30px 28px')}
+    </div>`)],
+    ['하단CTA', withUsed(() => cta({
+      title: `영업에 지장 없는 시간으로${br}<span style="color:#3B82F6;white-space:nowrap;">일정부터</span> 맞춰 드립니다`,
+      desc: `마감 후 야간, 새벽, 휴무일 작업이 가능합니다. ${b('<span style="color:#FFFFFF;">영업 시간과 희망 요일</span>')}을 알려주시면 작업 소요 시간에 맞춰 일정을 제안드립니다.`,
+      primary: '작업 일정 문의하기 →',
+    }))],
+  ],
+};
+
+/* ============================================================ 시공 품질기준 */
+const quality = {
+  dir: '시공품질기준',
+  sections: [
+    ['페이지헤드', withUsed(() => pagehead({
+      crumbs: stdCrumbs('시공 품질기준'),
+      title: `"청소 끝났습니다"의 기준,${br}<span style="color:#3B82F6;white-space:nowrap;">설비별로 정해</span> 두었습니다`,
+      desc: '눈으로 보기에 깨끗한 것만으로는 완료로 보지 않습니다. 설비별 완료 판정 기준과 재질별 사용 금지 약품, 복구 불가 손상의 사전 안내 원칙을 공개합니다.',
+      chips: ['#완료 판정 기준', '#사용 금지 약품', '#사전 서면 안내', '#재작업 기준'],
+    }))],
+    ['완료판정기준', section({ key: 'ovis-qs-done', bg: '#FFFFFF' }, () => `${head({
+      eb: '설비별 완료 판정 기준',
+      title: `어느 상태가 되어야 ${blue('완료')}인가`,
+      desc: '작업 후 아래 기준으로 확인하고, 기준에 미달한 구간은 현장에서 재작업합니다.',
+    })}
+${stdTable([['설비', 150], ['완료 판정 기준'], ['확인 방법', 220]], [
+      ['후드 필터', '필터 틈 사이로 빛이 고르게 통과하고, 표면에 유분 막이 남지 않음', '역광 확인 · 촉감 확인'],
+      ['후드 내부 판재', '판재 · 이음부 · 모서리에 굳은 유분과 흘러내린 자국이 없음', '작업 전 사진과 같은 위치 비교'],
+      ['기름받이 · 배유관', '고인 기름과 슬러지가 없고 배유가 막힘 없이 흐름', '물 흘림 확인'],
+      ['덕트 내부', '점검구로 접근 가능한 구간 벽면에 두꺼운 유분층이 남지 않음', '점검구 내부 촬영'],
+      ['배기팬', '날개 · 케이싱의 유분 제거, 시운전 시 이상 소음 · 진동 없음', '시운전'],
+      ['스테인리스 외판', '얼룩 · 유분 자국 없이 결 방향으로 마감', '조명 반사 확인'],
+    ])}`)],
+    ['금지약품', section({ key: 'ovis-qs-chem', bg: '#F4F7FB' }, () => {
+      const c = (mat, avoid, why, use_) => card(
+        cardTitle(mat, 14, 18)
+        + `<div style="margin-bottom:12px;padding:12px 14px;border-radius:10px;background:#FFF6F0;border:1px solid #FFD9C2;"><div style="margin-bottom:2px;font-size:12px;font-weight:700;letter-spacing:.04em;color:#E85A12;">사용하지 않는 약품</div><div style="font-size:14px;font-weight:700;line-height:1.6;color:#0F1724;">${avoid}</div></div>`
+        + cardText(why, 12)
+        + `<div style="font-size:13px;font-weight:500;line-height:1.7;color:#1547B0;">→ ${use_}</div>`, '26px 22px');
+      return `${head({
+        eb: '재질별 사용 금지 약품',
+        title: `강한 약품이 ${blue('좋은 약품은 아닙니다')}`,
+        desc: '오염을 빨리 녹이는 약품이 설비 표면을 함께 상하게 하는 경우가 많습니다. 재질을 먼저 확인하고 아래 기준을 지킵니다.',
+      })}
+${grid(4, [
+        c('스테인리스', '염소계 표백제 장시간 방치', '염소 성분이 남으면 표면에 점 부식과 변색이 생길 수 있습니다.', '알칼리 · 중성 세정 후 충분히 헹굼'),
+        c('알루미늄 필터', '강알칼리 세정제 장시간 침적', '알루미늄은 강알칼리에 부식되어 표면이 검게 변하고 얇아집니다.', '알루미늄 전용 · 약알칼리 세정제'),
+        c('아연도금 강판 덕트', '강산 · 강알칼리 세정제', '도금층이 벗겨지면 그 자리부터 녹이 빠르게 진행됩니다.', '중성 · 약알칼리 세정 후 물기 제거'),
+        c('도장 · 코팅면', '유기용제 · 연마제', '도장과 코팅이 녹거나 긁혀 원래 상태로 되돌릴 수 없습니다.', '중성 세정제 · 부드러운 패드'),
+      ])}`;
+    })],
+    ['사전안내', section({ key: 'ovis-qs-notice', bg: '#FFFFFF' }, () => `    <div class="ovis-split2" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+      <div>
+        ${eyebrow('복구 불가 손상 사전 안내')}
+        ${h2(`청소로 되돌릴 수 없는 것은${br}${blue('작업 전에')} 말씀드립니다`)}
+        ${sub('오래 방치된 설비에는 청소로 복구되지 않는 손상이 이미 있는 경우가 있습니다. 작업 후에 "원래 이랬다"고 설명하지 않도록, 사전점검 단계에서 사진과 함께 서면으로 안내하고 동의를 받은 뒤 작업합니다.', 24)}
+        ${list([
+        { t: '① 사전점검 중 발견', s: '손상 부위를 촬영하고 위치를 기록합니다' },
+        { t: '② 서면 안내 · 동의', s: '복구 가능 여부와 작업 방법을 안내하고 동의를 받습니다' },
+        { t: '③ 리포트에 기록', s: '작업 후 리포트에 해당 부위 상태를 함께 남깁니다' },
+      ], 'check')}
+      </div>
+      ${card(cardTitle('사전 안내 대상 예시', 16, 17) + list([
+        { t: '부식 · 천공', s: '녹이 슬어 판재에 구멍이 났거나 얇아진 부위' },
+        { t: '고착된 변색', s: '열과 유분으로 표면 자체가 변색된 스테인리스' },
+        { t: '도장 · 코팅 박리', s: '이미 들뜨거나 벗겨지기 시작한 표면' },
+        { t: '필터 변형 · 파손', s: '휘거나 찢어져 세정 후에도 기능이 떨어지는 필터' },
+        { t: '배기팬 노후', s: '베어링 소음 · 진동이 이미 있는 모터' },
+      ], 'dash', { color: '#0F1724' }), '30px 28px')}
+    </div>`)],
+    ['하단CTA', withUsed(() => cta({
+      title: `견적을 비교하실 때${br}<span style="color:#3B82F6;white-space:nowrap;">완료 기준</span>도 함께 보세요`,
+      desc: `같은 "후드청소"라도 어디까지, 어떤 상태까지 청소하는지는 업체마다 다릅니다. ${b('<span style="color:#FFFFFF;">작업 범위와 완료 기준을 적은 견적서</span>')}로 안내드립니다.`,
+    }))],
+  ],
+};
+
+/* ============================================================ 자주 묻는 질문 */
+const faqPage = {
+  dir: '자주묻는질문',
+  sections: [
+    ['페이지헤드', withUsed(() => pagehead({
+      crumbs: ['홈', '자주 묻는 질문'],
+      title: `상업용 주방 청소,${br}<span style="color:#3B82F6;white-space:nowrap;">가장 많이 묻는 질문</span>을 모았습니다`,
+      desc: '청소 주기, 견적 기준, 작업 소요 시간, 영업 중 작업 가능 여부, 덕트 점검구, 소방 · 위생 점검 대응까지. 상담에서 자주 받는 질문을 주제별로 정리했습니다.',
+      chips: ['#청소 주기', '#견적 기준', '#작업 시간', '#점검구', '#소방·위생 점검'],
+    }))],
+    ['주기견적', faqSection('ovis-fq-price', [
+      { q: '후드청소는 얼마나 자주 해야 하나요?', a: '조리 방식에 따라 다릅니다. 고깃집 · 중식 · 튀김처럼 유분이 많은 매장은 월 1회에서 분기 1회, 일반 음식점은 분기 1회, 카페 · 베이커리는 반기 1회를 기준으로 현장에서 다시 산정합니다.' },
+      { q: '덕트청소 주기는 후드와 같나요?', a: '덕트는 후드보다 오염이 천천히 쌓여 보통 반기 1회에서 연 1회를 기준으로 합니다. 다만 유분이 많은 매장은 더 짧게 잡습니다.' },
+      { q: '견적은 무엇을 기준으로 정해지나요?', a: '후드 길이와 필터 수량, 덕트 길이와 구조, 점검구 유무, 오염도, 작업 시간대(야간 · 휴무일)가 주요 기준입니다. 같은 기준으로 작업 범위를 적어 견적서로 드립니다.' },
+      { q: '사진만 보고 견적을 받을 수 있나요?', a: '후드 전체, 필터, 후드 안쪽 사진 3~5장이면 대략적인 견적이 가능합니다. 덕트 구조가 복잡하거나 점검구 시공이 필요하면 현장 점검 후 확정합니다.' },
+      { q: '견적 외에 추가 비용이 생기나요?', a: '견적서에 적힌 범위 밖의 작업은 현장에서 임의로 진행하지 않습니다. 추가 작업이 필요하면 작업 전에 먼저 안내하고 동의를 받습니다.' },
+    ], '#FFFFFF', { eb: '청소 주기 · 견적', title: `얼마나 자주,${br}얼마에 하나요?`, desc: '매장마다 조건이 달라 정확한 금액은 현장 사진이나 점검 후 안내드립니다.' })],
+    ['작업시간', faqSection('ovis-fq-time', [
+      { q: '작업 시간은 얼마나 걸리나요?', a: '후드 길이와 오염도, 덕트 포함 여부에 따라 달라집니다. 사전점검이나 사진 확인 단계에서 예상 소요 시간을 함께 안내드립니다.' },
+      { q: '영업 중에도 작업할 수 있나요?', a: '조리 중에는 작업하지 않습니다. 마감 후 야간, 새벽, 휴무일로 일정을 조율해 다음 영업에 지장이 없도록 합니다.' },
+      { q: '작업하는 동안 매장에 있어야 하나요?', a: '작업 시작 전 범위 확인과 작업 후 결과 확인 때만 계시면 됩니다. 출입 방법을 미리 협의하면 무인 작업 후 리포트로 확인하실 수도 있습니다.' },
+      { q: '작업 후 바로 조리할 수 있나요?', a: '헹굼과 건조, 시운전까지 마친 뒤 작업을 종료하므로 바로 사용하실 수 있습니다. 바닥 물기 등 주의가 필요한 부분은 작업 종료 때 안내드립니다.' },
+    ], '#F4F7FB', { eb: '작업 시간 · 영업', title: `영업에 지장은${br}없나요?`, desc: '대부분의 현장은 마감 후나 휴무일에 작업합니다.', button: false })],
+    ['점검구소방', faqSection('ovis-fq-duct', [
+      { q: '덕트에 점검구가 없으면 청소가 안 되나요?', a: '가능합니다. 구조를 확인해 필요한 위치에 점검구를 시공한 뒤 작업합니다. 시공 위치 · 수량 · 비용은 작업 전에 먼저 안내드립니다.' },
+      { q: '점검구를 만들면 다음에도 쓸 수 있나요?', a: '네. 한 번 시공한 점검구는 다음 청소 때도 그대로 사용하므로 이후 작업이 수월해집니다.' },
+      { q: '소방 점검에서 배기덕트를 지적받았어요.', a: `작업 ${'전·후'} 덕트 내부 사진과 점검소견이 담긴 리포트를 드립니다. 점검 기준과 제출 서류는 관할 소방서마다 다를 수 있어 미리 확인하시길 권합니다.` },
+      { q: '위생 점검 대비 청소도 하나요?', a: '주방 전체청소에서 점검 때 자주 지적되는 조리대 하부, 배수 라인, 보관 선반을 중심으로 정리하고 사진 기록을 남깁니다.' },
+      { q: '세금계산서 발행이 되나요?', a: '위생관리용역업(건물위생관리업) 등록업체로 세금계산서를 발행합니다. 프랜차이즈 본사 일괄 정산도 협의 가능합니다.' },
+    ], '#FFFFFF', { eb: '덕트 점검구 · 점검 대응', title: `점검구 · 소방 · 위생${br}점검은요?`, desc: '점검 대응에 필요한 기록을 작업 리포트로 남깁니다.' })],
+    ['하단CTA', withUsed(() => cta({
+      title: `찾는 답이 없으신가요?${br}<span style="color:#3B82F6;white-space:nowrap;">직접 물어보세요</span>`,
+      desc: `매장 상황을 알려주시면 ${b('<span style="color:#FFFFFF;">현장에 맞는 답변</span>')}을 드립니다. 사진을 함께 보내주시면 더 정확합니다.`,
+      primary: '질문 · 견적 문의하기 →',
+    }))],
+  ],
+};
+
+/* ============================================================ 청소 가이드 */
+// 가이드 페이지에는 기존 '최신글' 위젯 섹션이 있다 → 페이지헤드 · 주제 요약은 그 위, CTA 는 그 아래
+const guide = {
+  dir: '청소가이드',
+  sections: [
+    ['페이지헤드', withUsed(() => pagehead({
+      crumbs: ['홈', '청소 가이드'],
+      title: `현장에서 쓰는 기준을${br}<span style="color:#3B82F6;white-space:nowrap;">그대로 공개</span>합니다`,
+      desc: '후드 · 덕트 오염 판정, 세정제 계열별 사용 기준, 스테인리스 관리, 주방 화재 대비까지. 업체를 부르기 전에 매장에서 먼저 확인해 볼 수 있는 기준을 정리했습니다.',
+      chips: ['#오염 판정', '#세정제 계열', '#스테인리스 관리', '#주방 화재 대비'],
+    }))],
+    ['가이드주제', section({ key: 'ovis-gd-topic', bg: '#FFFFFF' }, () => {
+      const t = (en, title, items) => card(
+        `<div style="margin-bottom:12px;font-size:11px;font-weight:700;letter-spacing:.16em;line-height:1.7;color:#1E5FD9;">${en}</div>`
+        + cardTitle(title, 14, 18) + list(items, 'dot', { size: 13.5, color: '#475467', weight: 400, gap: 7 }), '26px 22px');
+      return `${head({
+        eb: '가이드 주제',
+        title: `매장에서 ${blue('먼저 확인해 볼 것')}`,
+        desc: '아래 기준에 해당하면 청소 시기가 됐거나 지났을 가능성이 높습니다.',
+      })}
+${grid(4, [
+        t('CHECK 01', '후드 · 덕트 오염 판정', ['필터를 들어 빛에 비췄을 때 틈이 막혀 보임', '후드 안쪽 판재를 손으로 문지르면 유분이 묻어남', '연기가 빠지지 않고 주방에 머묾']),
+        t('CHECK 02', '세정제 계열별 사용 기준', ['굳은 기름때 — 알칼리 계열', '물때 · 스케일 — 산성 계열', '일상 표면 청소 — 중성 계열', '서로 다른 계열 약품은 섞지 않음']),
+        t('CHECK 03', '스테인리스 관리', ['결 방향으로 닦기', '염소계 표백제는 오래 두지 않고 바로 헹굼', '철 수세미 대신 부드러운 패드 사용']),
+        t('CHECK 04', '주방 화재 대비', ['화구 가까이에 주방용 소화기 비치', '후드 · 덕트 유분을 정기적으로 제거', '비치 기준은 관할 소방서에 확인']),
+      ])}`;
+    })],
+    ['하단CTA', withUsed(() => cta({
+      title: `기준에 해당된다면,${br}<span style="color:#3B82F6;white-space:nowrap;">점검부터</span> 받아보세요`,
+      desc: `사진 3~5장이면 ${b('<span style="color:#FFFFFF;">지금 필요한 작업과 우선순위</span>')}를 먼저 정리해 드립니다.`,
+    }))],
+  ],
+};
+
+/* ============================================================ 회사소개 */
+const about = {
+  dir: '회사소개',
+  sections: [
+    ['페이지헤드', withUsed(() => pagehead({
+      crumbs: ['홈', '회사소개'],
+      title: `상업용 주방 배기설비를${br}<span style="color:#3B82F6;white-space:nowrap;">기준을 가지고</span> 청소하는 회사`,
+      desc: `오비스크린은 음식점 · 프랜차이즈 · 단체급식 · 호텔 주방의 후드청소, 덕트청소, 주방 전체청소, 정기 위생관리를 합니다. 표준작업매뉴얼(${nw('OBS-SOP-001')})에 따라 작업하는 위생관리용역업 등록업체입니다.`,
+      chips: ['#위생관리용역업 등록', '#7년+ 경력', '#표준작업매뉴얼', '#수도권 전지역'],
+    }))],
+    ['소개', section({ key: 'ovis-ab-intro', bg: '#FFFFFF' }, () => {
+      const stat = (n, unit, l, s, wide) => `<div class="ovis-stat${wide ? ' ovis-stat-wide' : ''}" style="${wide ? 'grid-column:1/-1;' : ''}padding:24px 22px;border:1px solid #E4E9F0;border-radius:16px;background:#FFFFFF;box-shadow:0 1px 2px rgba(16,24,40,.05);">
+          <span class="ovis-stat-num" style="display:block;font-size:clamp(30px,4vw,42px);font-weight:900;line-height:1.1;letter-spacing:-.04em;color:#1547B0;">${n}${unit ? `<span style="font-size:17px;font-weight:700;letter-spacing:-.02em;">${unit}</span>` : ''}</span>
+          <span class="ovis-stat-label" style="display:block;margin-top:8px;font-size:14px;font-weight:700;line-height:1.6;color:#0F1724;">${l}</span>
+          <span class="ovis-stat-sub" style="display:block;margin-top:2px;font-size:12.5px;font-weight:400;line-height:1.7;color:#7B8794;">${s}</span>
+        </div>`;
+      return `    <div class="ovis-split2" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+      <div>
+        ${eyebrow('오비스크린')}
+        ${h2(`단순 청소가 아니라,${br}${blue('기준을 가진 시공')}입니다`)}
+        ${sub('같은 후드라도 재질과 오염 상태에 따라 약품과 공정이 달라집니다. 그래서 오비스크린은 어디까지 청소하고 무엇을 하지 않는지를 문서로 정해 두고, 모든 현장에 같은 기준을 적용합니다.', 16)}
+        ${sub(`작업 결과는 ${'전·후'} 사진과 점검소견 리포트로 남깁니다. 한 번 청소하고 끝내지 않고, 다음 청소 시점까지 함께 관리하는 것이 목표입니다.`)}
+      </div>
+      <div class="ovis-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        ${stat('7', '년+', '상업주방 배기 · 청소 경력', '음식점 · 급식소 · 호텔 현장')}
+        ${stat('11', '종', '약품 취급 기준 문서', '세정제 계열별 기준')}
+        ${stat('OBS-SOP-001', '', '표준작업매뉴얼 기반 시공', '위생관리용역업(건물위생관리업) 등록업체 · 세금계산서 발행', true)}
+      </div>
+    </div>`;
+    })],
+    ['작업원칙', section({ key: 'ovis-ab-rule', bg: '#F4F7FB' }, () => `${head({
+      eb: '작업 원칙',
+      title: `오비스크린이 ${blue('지키는 네 가지')}`,
+    })}
+${grid(4, [
+      ['01', '계약보다 진단 먼저', '현재 오염 상태와 예산에 맞는 현실적인 방법부터 안내합니다.'],
+      ['02', '범위는 문서로', '포함 · 제외 작업을 견적서에 적고, 현장에서 임의로 바꾸지 않습니다.'],
+      ['03', '결과는 사진으로', `같은 위치 · 같은 각도의 ${'전·후'} 사진으로 결과를 남깁니다.`],
+      ['04', '손상은 미리 안내', '청소로 복구되지 않는 손상은 작업 전에 서면으로 안내합니다.'],
+    ].map(([n, t, d]) => card(num(n) + cardTitle(t) + cardText(d), '26px 22px')))}`)],
+    ['보유장비', section({ key: 'ovis-ab-equip', bg: '#FFFFFF' }, () => {
+      const e = (label, title, d) => `<div class="ovis-work" style="overflow:hidden;border:1px solid #E4E9F0;border-radius:16px;background:#FFFFFF;box-shadow:0 1px 2px rgba(16,24,40,.05);">
+        ${ph(label, 150)}
+        <div style="padding:18px 20px 20px;">${cardTitle(title, 6, 16)}${cardText(d)}</div>
+      </div>`;
+      return `${head({
+        eb: '보유 장비',
+        title: `현장에 맞는 ${blue('장비를 갖추고')} 갑니다`,
+        desc: '설비 구조와 오염도에 따라 필요한 장비를 챙겨 작업합니다.',
+      })}
+${grid(4, [
+        e('장비 사진', '고압 · 온수 세척기', '굳은 유분을 온수와 압력으로 분리합니다.'),
+        e('장비 사진', '필터 침적조', '필터를 세정제에 담가 틈 사이 유분을 녹여냅니다.'),
+        e('장비 사진', '덕트 점검 카메라', '점검구 안쪽 상태를 작업 전후로 촬영합니다.'),
+        e('장비 사진', '산업용 습 · 건식 청소기', '세정수와 오염물을 바로 회수합니다.'),
+        e('장비 사진', '이동식 비계 · 사다리', '높은 후드 · 덕트 구간을 안전하게 작업합니다.'),
+        e('장비 사진', '양생 자재', '조리설비와 바닥을 덮어 오염 확산을 막습니다.'),
+        e('장비 사진', '재질별 세정제', '알칼리 · 중성 · 산성 계열을 구분해 사용합니다.'),
+        e('장비 사진', '보호구', '보안경 · 내화학 장갑 등 약품 취급 보호구입니다.'),
+      ])}`;
+    })],
+    ['업체정보', section({ key: 'ovis-ab-info', bg: '#F4F7FB' }, () => `${head({
+      eb: '업체 정보',
+      title: `오비스크린 ${blue('기본 정보')}`,
+    })}
+${stdTable([['항목', 170], ['내용']], [
+      ['상호', '오비스크린 (OVIS CLEAN)'],
+      ['업종 등록', '위생관리용역업(건물위생관리업)'],
+      ['서비스', '후드청소 · 덕트청소 · 주방 전체청소 · 정기 위생관리'],
+      ['서비스 지역', '서울 · 경기 · 인천 전지역'],
+      ['상담 시간', '평일 09:00–19:00 (작업은 야간 · 새벽 · 휴무일 조율 가능)'],
+      ['정산', '세금계산서 발행 · 프랜차이즈 본사 일괄 정산 협의'],
+    ])}`)],
+    ['하단CTA', withUsed(() => cta({
+      title: `지금 쓰고 계신 후드,${br}<span style="color:#3B82F6;white-space:nowrap;">한 번 점검</span> 받아보시겠어요?`,
+      desc: `계약을 먼저 권하지 않습니다. ${b('<span style="color:#FFFFFF;">현재 오염 상태와 예산에 맞는 현실적인 방법</span>')}부터 작업 범위 기준으로 차분히 짚어드립니다.`,
+      primary: '무료 현장 점검 · 견적 문의 →',
+    }))],
+  ],
+};
+
 /* ============================================================ 출력 */
-const pages = [hood, duct, kitchen, maint, portfolio, contact];
+const pages = [hood, duct, kitchen, maint, portfolio, contact, standards, proc, quality, faqPage, guide, about];
 let total = 0;
 for (const p of pages) {
   const dir = path.join(OUT, p.dir);

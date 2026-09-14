@@ -240,15 +240,20 @@ ${items.map(({ q, a }) => `        <div style="padding:22px 4px;border-bottom:1p
       </div>`;
 }
 
-export function faqSection(key, items, bg = '#FFFFFF') {
+export function faqSection(key, items, bg = '#FFFFFF', {
+  eb = '자주 묻는 질문',
+  title = '상담 전에 <br class="ovis-br-pc">많이 물어보시는 것들',
+  desc = '여기에 없는 내용은 편하게 문의해 주세요. 현장 사진을 함께 보내주시면 더 정확하게 답변드립니다.',
+  button = true,
+} = {}) {
   return section({ key, bg }, () => {
     use('split');
     return `    <div class="ovis-split" style="display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start;">
       <div>
-        ${eyebrow('자주 묻는 질문')}
-        ${h2('상담 전에 <br class="ovis-br-pc">많이 물어보시는 것들')}
-        ${sub('여기에 없는 내용은 편하게 문의해 주세요. 현장 사진을 함께 보내주시면 더 정확하게 답변드립니다.', 22)}
-        ${btnLine('/contact', '질문 남기기 →')}
+        ${eyebrow(eb)}
+        ${h2(title)}
+        ${sub(desc, button ? 22 : 0)}
+        ${button ? btnLine('/contact', '질문 남기기 →') : ''}
       </div>
       ${faq(items)}
     </div>`;
