@@ -81,7 +81,7 @@ ${W} .card-head{height:200px!important}
 ${W} .card.no-img .card-thumbnail-wrap{background-image:${PH}!important}
 ${W} .card.no-img .card-head::after{content:"${b.placeholder}";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.72)}
 ${W} .card-body{padding:18px 18px 20px!important;border:0!important}
-${W} .card-summary{position:absolute!important;top:218px!important;right:18px!important;padding:0!important;margin:0!important;border:0!important;background:none!important}
+${W} .card-summary{position:absolute!important;top:218px!important;right:18px!important;left:auto!important;width:auto!important;text-align:right!important;padding:0!important;margin:0!important;border:0!important;background:none!important}
 ${W} .card-summary .avatar,${W} .card-summary .tools{padding:0!important;margin:0!important}
 ${W} .card-summary .date{font-size:11.5px!important;color:#7B8794!important}
 ${W} .card-foot{display:none!important}
