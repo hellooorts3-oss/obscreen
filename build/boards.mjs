@@ -64,7 +64,7 @@ function boardCss(b) {
   const common = `
 ${W}{max-width:1180px!important;margin:0 auto!important;padding:28px 24px 88px!important;box-sizing:border-box!important;font-family:${FONT}!important}
 ${W} .li_footer .btn{background:#1E5FD9!important;border-color:#1E5FD9!important;border-radius:8px!important}
-${W} .notice-block,${W} .addon-badge{display:none!important}
+${W} .notice-block,${W} .addon-badge,${W} .title .icons,${W} .tabled .icons{display:none!important}
 ${W} .pagination{margin-top:40px!important}
 ${W} .pagination>li>a,${W} .pagination>li>span{width:36px!important;height:36px!important;line-height:34px!important;padding:0!important;text-align:center!important;border-radius:8px!important;border:1px solid #E4E9F0!important;color:#475467!important;margin:0 3px!important;font-weight:600!important}
 ${W} .pagination>.active>a,${W} .pagination>.active>span{background:#1E5FD9!important;border-color:#1E5FD9!important;color:#FFFFFF!important}`;
