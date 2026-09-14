@@ -12,7 +12,7 @@ const F = {
 
 const W = `#${FORM_WIDGET}`;
 export const formCss = `<style>
-#ovis-form-slot ${W}{margin:0!important;padding:0!important}
+#ovis-form-slot ${W},#ovis-form-slot ${W} .form-widget{margin:0!important;padding:0!important;width:100%!important;max-width:100%!important}
 @media (min-width:901px){.os-formgrid{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)!important}}
 #ovis-form-slot{min-width:0!important}
 ${W} form{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;column-gap:14px!important;margin:0!important}
@@ -43,7 +43,7 @@ ${W} #privacy .form-control{max-height:110px!important;min-height:0!important;ov
 ${W} #privacy .checkbox label{font-size:12.5px!important;color:#475467!important;line-height:1.7!important}
 ${W} .form.text-center{margin:0!important;padding:0!important}
 ${W} ._input_form_submit{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;padding:15px 26px!important;border:0!important;border-radius:10px!important;background:#1E5FD9!important;color:#FFFFFF!important;font-size:15px!important;font-weight:700!important;box-shadow:0 6px 18px rgba(30,95,217,.3)!important}
-@media (max-width:560px){${W} form{grid-template-columns:1fr!important}${W} #${F.manager},${W} #${F.phone},${W} #${F.time},${W} #${F.date}{grid-column:1/-1!important}}
+@media (max-width:560px){${W} form{grid-template-columns:minmax(0,1fr)!important}${W} #${F.manager},${W} #${F.phone},${W} #${F.time},${W} #${F.date}{grid-column:1/-1!important}}
 </style>
 <script>
 (function(){
