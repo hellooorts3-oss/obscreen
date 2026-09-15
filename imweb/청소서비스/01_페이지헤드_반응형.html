@@ -1,0 +1,88 @@
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css');
+html,body{overflow-x:clip}
+@media (max-width:991px){
+.doz_sys .doz_row .widget.widget_text_wrap,
+.doz_sys main > .doz_row .widget.widget_text_wrap,
+.doz_sys .extend_section .doz_row .widget.widget_text_wrap,
+.doz_sys .extend_section main > .doz_row .widget.widget_text_wrap,
+.widget.widget_text_wrap{padding-left:0!important;padding-right:0!important}
+.doz_sys .doz_row > .col-dz,
+.doz_sys main > .doz_row > .col-dz{padding-left:0!important;padding-right:0!important}
+}
+.ovis-sec,.ovis-sec *{box-sizing:border-box!important}
+.ovis-sec,.ovis-sec p,.ovis-sec span,.ovis-sec div,.ovis-sec a,.ovis-sec h1{font-family:Pretendard,'Apple SD Gothic Neo',system-ui,sans-serif!important;word-break:keep-all!important;overflow-wrap:break-word}
+.ovis-sec img{display:block!important;max-width:100%!important;margin:0!important}
+.ovis-sec a{text-decoration:none!important}
+.ovis-sec button::before,.ovis-sec button::after{content:none!important;display:none!important}
+.ovis-sec{position:relative!important;left:50%!important;transform:translateX(-50%)!important;width:100vw!important;max-width:100vw!important;margin:0!important}
+.ovis-c{width:100%!important;max-width:1180px!important;margin:0 auto!important;padding:0 24px!important}
+.ovis-pagehead{padding:64px 0 58px!important;overflow:hidden!important;background:#08111E!important}
+.ovis-pagehead::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 800px 400px at 70% 10%,rgba(30,95,217,.24),transparent 62%),repeating-linear-gradient(112deg,rgba(255,255,255,.026) 0 30px,rgba(255,255,255,0) 30px 60px)}
+.ovis-pagehead-h1,.ovis-pagehead-p{text-wrap:balance}
+.ovis-crumb{text-wrap:pretty}
+@media (max-width:600px){
+.ovis-pagehead .ovis-br-pc{display:none!important}
+.ovis-pagehead .ovis-br-pc + *{margin-left:.28em!important}
+}
+</style>
+<script>
+(function(){
+  if(window.__ovisH1) return;
+  window.__ovisH1=true;
+  var RESET={'font-family':"Pretendard,'Apple SD Gothic Neo',system-ui,sans-serif",'border':'0','background':'none','text-transform':'none','width':'auto','max-width':'none','display':'block'};
+  function collect(el){
+    if(el.__ovisCSS) return el.__ovisCSS;
+    var raw=el.getAttribute('style')||'';
+    var out={};
+    var parts=raw.split(';');
+    for(var i=0;i<parts.length;i++){
+      var p=parts[i];
+      var idx=p.indexOf(':');
+      if(idx<1) continue;
+      var k=p.slice(0,idx).trim();
+      var v=p.slice(idx+1).replace('!important','').trim();
+      if(k&&v) out[k]=v;
+    }
+    el.__ovisCSS=out;
+    return out;
+  }
+  function paintEl(el,withReset){
+    var own=collect(el);
+    var k;
+    if(withReset){
+      for(k in RESET){
+        if(Object.prototype.hasOwnProperty.call(RESET,k)&&!(k in own)) el.style.setProperty(k,RESET[k],'important');
+      }
+    }
+    for(k in own){
+      if(Object.prototype.hasOwnProperty.call(own,k)) el.style.setProperty(k,own[k],'important');
+    }
+  }
+  function paint(){
+    var hs=document.querySelectorAll('.ovis-h1');
+    for(var i=0;i<hs.length;i++){
+      paintEl(hs[i],true);
+      var kids=hs[i].querySelectorAll('[style]');
+      for(var j=0;j<kids.length;j++) paintEl(kids[j],false);
+    }
+  }
+  function boot(){
+    paint();
+    var n=0;
+    var timer=setInterval(function(){
+      paint();
+      n++;
+      if(n>14) clearInterval(timer);
+    },400);
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',boot);
+  }else{
+    boot();
+  }
+  window.addEventListener('load',paint);
+  window.addEventListener('resize',paint);
+  window.addEventListener('pageshow',boot);
+})();
+</script>

@@ -1,0 +1,28 @@
+<style>
+.ovis-procsec{padding:88px 0!important;background:#FFFFFF!important}
+.ovis-procsec .ovis-h2,.ovis-procsec .ovis-h4{text-wrap:balance}
+.ovis-procsec .ovis-step p{text-wrap:pretty}
+.ovis-procgrid{display:grid!important;grid-template-columns:1.15fr .85fr!important;gap:48px!important;align-items:start!important;margin-top:40px!important}
+.ovis-steps{margin:0!important;padding:0!important}
+.ovis-step{position:relative!important;display:grid!important;grid-template-columns:38px 1fr!important;gap:18px!important}
+.ovis-step::after{content:"";position:absolute;left:18.5px;top:36px;bottom:2px;width:1px;background:#E4E9F0}
+.ovis-step-last::after{content:none}
+.ovis-step-n{flex:none}
+.ovis-tabs{display:flex!important;flex-wrap:wrap!important;gap:7px!important}
+.ovis-checks{display:grid!important;gap:9px!important;margin:0!important;padding:0!important}
+.ovis-check{display:flex!important;align-items:flex-start!important;gap:7px!important}
+.ovis-check-ico{flex:0 0 12px!important;color:#1E5FD9!important}
+.ovis-procsec .ovis-btn-primary,.ovis-procsec .ovis-btn-primary:link,.ovis-procsec .ovis-btn-primary:visited{background:#1E5FD9!important;color:#FFFFFF!important}
+.ovis-btn-block{display:flex!important;width:100%!important}
+.ovis-procsec .ovis-btn-primary{transition:transform .18s ease,background-color .18s ease,box-shadow .18s ease}
+@media (hover:hover){
+.ovis-procsec .ovis-btn-primary:hover{background:#1547B0!important;transform:translateY(-2px);box-shadow:0 10px 24px rgba(30,95,217,.42)!important}
+}
+@media (max-width:900px){
+.ovis-procgrid{grid-template-columns:1fr!important;gap:32px!important}
+}
+@media (max-width:600px){
+.ovis-procsec .ovis-br-pc{display:none!important}
+.ovis-procsec .ovis-br-pc + *{margin-left:.28em!important}
+}
+</style>

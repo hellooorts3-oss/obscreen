@@ -1,0 +1,93 @@
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css');
+html,body{overflow-x:clip}
+@media (max-width:991px){
+.doz_sys .doz_row .widget.widget_text_wrap,
+.doz_sys main > .doz_row .widget.widget_text_wrap,
+.doz_sys .extend_section .doz_row .widget.widget_text_wrap,
+.doz_sys .extend_section main > .doz_row .widget.widget_text_wrap,
+.widget.widget_text_wrap{padding-left:0!important;padding-right:0!important}
+.doz_sys .doz_row > .col-dz,
+.doz_sys main > .doz_row > .col-dz{padding-left:0!important;padding-right:0!important}
+}
+.ovis-sec,.ovis-sec *{box-sizing:border-box!important}
+.ovis-sec,.ovis-sec p,.ovis-sec span,.ovis-sec div,.ovis-sec a,.ovis-sec h1{font-family:Pretendard,'Apple SD Gothic Neo',system-ui,sans-serif!important;word-break:keep-all!important;overflow-wrap:break-word}
+.ovis-sec img{display:block!important;max-width:100%!important;margin:0!important}
+.ovis-sec a{text-decoration:none!important}
+.ovis-sec button::before,.ovis-sec button::after{content:none!important;display:none!important}
+.ovis-sec{position:relative!important;left:50%!important;transform:translateX(-50%)!important;width:100vw!important;max-width:100vw!important;margin:0!important}
+.ovis-c{width:100%!important;max-width:1180px!important;margin:0 auto!important;padding:0 24px!important}
+.ovis-hero{min-height:640px!important;padding:96px 0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;overflow:hidden!important;background-color:#132539!important;background-image:linear-gradient(180deg,rgba(8,17,30,.78),rgba(8,17,30,.70)),linear-gradient(120deg,#1B3A5C 0%,#132539 45%,#0A1220 100%)!important}
+.ovis-hero::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(112deg,rgba(255,255,255,.030) 0 34px,rgba(255,255,255,0) 34px 68px)}
+.ovis-hero-inner{position:relative!important;z-index:1!important;width:100%!important;max-width:900px!important;margin:0 auto!important;padding:0 24px!important}
+.ovis-hero-h1,.ovis-hero-desc{text-wrap:balance}
+.ovis-hero-cue::before{content:"";display:block;width:1px;height:34px;margin:0 auto 10px;background:rgba(255,255,255,.28)}
+.ovis-hero-btns a,.ovis-hero-btns a:link,.ovis-hero-btns a:visited{color:#FFFFFF!important}
+.ovis-btn-primary,.ovis-btn-primary:link,.ovis-btn-primary:visited{background:#1E5FD9!important;color:#FFFFFF!important}
+.ovis-btn-outline,.ovis-btn-outline:link,.ovis-btn-outline:visited{background:transparent!important;color:#FFFFFF!important;border-color:rgba(255,255,255,.7)!important}
+.ovis-btn-primary,.ovis-btn-outline{transition:transform .18s ease,background-color .18s ease,box-shadow .18s ease,border-color .18s ease}
+@media (hover:hover){
+.ovis-btn-primary:hover{background:#1547B0!important;transform:translateY(-2px);box-shadow:0 10px 24px rgba(30,95,217,.42)!important}
+.ovis-btn-outline:hover{background:rgba(255,255,255,.10)!important;border-color:#FFFFFF!important;transform:translateY(-2px)}
+}
+</style>
+<script>
+(function(){
+  if(window.__ovisH1) return;
+  window.__ovisH1=true;
+  var RESET={'font-family':"Pretendard,'Apple SD Gothic Neo',system-ui,sans-serif",'border':'0','background':'none','text-transform':'none','width':'auto','max-width':'none','display':'block'};
+  function collect(el){
+    if(el.__ovisCSS) return el.__ovisCSS;
+    var raw=el.getAttribute('style')||'';
+    var out={};
+    var parts=raw.split(';');
+    for(var i=0;i<parts.length;i++){
+      var p=parts[i];
+      var idx=p.indexOf(':');
+      if(idx<1) continue;
+      var k=p.slice(0,idx).trim();
+      var v=p.slice(idx+1).replace('!important','').trim();
+      if(k&&v) out[k]=v;
+    }
+    el.__ovisCSS=out;
+    return out;
+  }
+  function paintEl(el,withReset){
+    var own=collect(el);
+    var k;
+    if(withReset){
+      for(k in RESET){
+        if(Object.prototype.hasOwnProperty.call(RESET,k)&&!(k in own)) el.style.setProperty(k,RESET[k],'important');
+      }
+    }
+    for(k in own){
+      if(Object.prototype.hasOwnProperty.call(own,k)) el.style.setProperty(k,own[k],'important');
+    }
+  }
+  function paint(){
+    var hs=document.querySelectorAll('.ovis-h1');
+    for(var i=0;i<hs.length;i++){
+      paintEl(hs[i],true);
+      var kids=hs[i].querySelectorAll('[style]');
+      for(var j=0;j<kids.length;j++) paintEl(kids[j],false);
+    }
+  }
+  function boot(){
+    paint();
+    var n=0;
+    var timer=setInterval(function(){
+      paint();
+      n++;
+      if(n>14) clearInterval(timer);
+    },400);
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',boot);
+  }else{
+    boot();
+  }
+  window.addEventListener('load',paint);
+  window.addEventListener('resize',paint);
+  window.addEventListener('pageshow',boot);
+})();
+</script>
